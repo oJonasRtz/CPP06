@@ -54,9 +54,6 @@ run: all
 test: all
 	@for i in \$(shell seq 1 \$(TESTS)); do \\
 		valgrind ./\$(NAME) \$\$i; \\
-		if [ \$\$i -eq 3 ]; then \\
-			cat test_shrubbery; \\
-		fi; \\
 	done
 
 clean:
@@ -78,7 +75,4 @@ EOF
 
 
 #Creates class
-./createClass.sh $CLASSNAME
-
-mv ${CLASSNAME}.cpp  $FOLDERNAME/src
-mv ${CLASSNAME}.hpp  $FOLDERNAME/includes
+./createClass.sh $CLASSNAME $FOLDERNAME

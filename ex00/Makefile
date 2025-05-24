@@ -1,5 +1,5 @@
-NAME=temp
-TESTS = 5
+NAME=scalar
+TESTS = 1
 
 CC = c++
 FLAGS = -g3 -Wall -Werror -Wextra -std=c++98
@@ -25,12 +25,15 @@ run: all
 	@valgrind ./$(NAME)
 
 test: all
-	@for i in $(shell seq 1 $(TESTS)); do \
-		valgrind ./$(NAME) $$i; \
-		if [ $$i -eq 3 ]; then \
-			cat test_shrubbery; \
-		fi; \
-	done
+	@valgrind ./$(NAME)
+	@valgrind ./$(NAME) 1
+	@valgrind ./$(NAME) 42
+	@valgrind ./$(NAME) 15.4007
+	@valgrind ./$(NAME) 15.4007f
+	@valgrind ./$(NAME) c
+	@valgrind ./$(NAME) hello
+	@valgrind ./$(NAME) 97.435435435535543
+	@valgrind ./$(NAME) nan
 
 clean:
 	@echo "\033[1;32m===========================================\033[0m"
