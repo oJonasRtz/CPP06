@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <cfloat>
 #include <string>
+#include <sstream>
 
 class ScalarConverter
 {
@@ -21,10 +22,10 @@ class ScalarConverter
 		ScalarConverter	&operator=(const ScalarConverter &other);
 		~ScalarConverter();
 		
-		static void	makeChar(std::string &str);
-		static void	makeInt(std::string &str);
-		static void	makeFloat(std::string &str);
-		static void	makeDouble(std::string &str);
+		static std::string	makeChar(std::string &str);
+		static std::string	makeInt(std::string &str);
+		static float		makeFloat(std::string &str);
+		static double		makeDouble(std::string &str);
 		template<typename T>
 		static void	printMessage(const std::string &type, const T &message)
 		{

@@ -9,7 +9,7 @@ static int	error(void)
 
 int	main(int argc, char **argv)
 {
-	if (argc < 2)
+	if (argc != 2 || (!argv[1] || !argv[1][0]) || !std::isprint(argv[1][0]))
 		return (error());
 
 	std::string	str = argv[1];

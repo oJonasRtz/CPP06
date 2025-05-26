@@ -53,44 +53,47 @@ void	ScalarConverter::printMessage<double>(const std::string &type, const double
 		<< "\n" RESET;
 }
 
-void	ScalarConverter::makeChar(std::string &str)
+static bool	simpleCheck(std::string &str)
 {
-	if (str.size() == 1)
+	return (str == "nan" || str == "nanf"
+		|| str == "+inf" || str == "+inff"
+		|| str == "-inf" || str == "-inff");
+}
+
+std::string	ScalarConverter::makeChar(std::string &str)
+{
+	if (simpleCheck(str)
+		|| (str.size() > 1 && !std::isdigit(str[0]) && str[0] != '-'))
+		return ("impossible");
+
+	if (std::isdigit(str[0]) || std::isdigit(str[1]))
 	{
-		std::string	out;
-
-		out = (!std::isprint(str[0])) ? "Non displayable" : str;
-
-		printMessage("char", out);
-		return;
+		int	i = std::atoi(str.c_str());
+		if (!std::isprint(i))
+			return ("Non displayable");
+		return ("'" + std::string(1, static_cast<char>(i)) + "'");
 	}
-	if (str == "nan" || str == "NAN")
-		return (printMessage("char", "impossible"));
-	
-	printMessage("char", "\'*\'");
+
+	//str.size() == 1  && std::isdigit(str[0]);
+	return ("'" + str + "'");
 }
-void	ScalarConverter::makeInt(std::string &str)
+std::string	ScalarConverter::makeInt(std::string &str)
 {
-	if (str == "nan" || str == "NAN")
-		return (printMessage("int",  "impossible"));
+	if (simpleCheck(str))
+		return ("impossible");
 
-	int	i = std::atoi(str.c_str());
+	std::ostringstream os;
+	os << std::atoi(str.c_str());
 
-	printMessage("int", i);
+	return (os.str());
 }
-void	ScalarConverter::makeFloat(std::string &str)
+float	ScalarConverter::makeFloat(std::string &str)
 {
-	float	f = std::atof(str.c_str());
-
-	printMessage("float", f);
-	return;
+	return (std::atof(str.c_str()));
 }
-void	ScalarConverter::makeDouble(std::string &str)
+double	ScalarConverter::makeDouble(std::string &str)
 {
-	double	d = std::atof(str.c_str());
-
-	printMessage("double", d);
-	return;
+	return (std::atof(str.c_str()));
 }
 
 static void	message(const std::string &message)
@@ -100,11 +103,11 @@ static void	message(const std::string &message)
 
 void	ScalarConverter::convert(std::string &str)
 {
-	if (str[0] == '.')
+	if (str[0] == '.' && std::isdigit(str[1]))
 		return (message("Error: invalid input."));
 
-	makeChar(str);
-	makeInt(str);
-	makeFloat(str);
-	makeDouble(str);
+	printMessage("char", makeChar(str));
+	printMessage("int", makeInt(str));
+	printMessage("float", makeFloat(str));
+	printMessage("double", makeDouble(str));
 }
