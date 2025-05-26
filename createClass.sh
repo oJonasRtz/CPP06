@@ -2,7 +2,7 @@
 
 #Check input
 if [ $# -lt 2 ]; then
-	echo "How to use: ./createClass.sh <class name> folder"
+	echo "How to use: ./createClass.sh <class name> <folder>"
 	exit 1
 fi
 
