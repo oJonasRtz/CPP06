@@ -29,49 +29,80 @@ std::ostream	&operator<<(std::ostream &out, const ScalarConverter &other)
 	return (out);
 }
 
+template<>
+void	ScalarConverter::printMessage<float>(const std::string &type, const float &message)
+{
+	std::cout << BLUE << 
+		type <<
+		":\t\t" <<
+		ORANGE <<
+		std::fixed << std::setprecision(1) <<
+		message
+		<< "f\n" RESET;
+}
+
+template<>
+void	ScalarConverter::printMessage<double>(const std::string &type, const double &message)
+{
+	std::cout << BLUE << 
+		type <<
+		":\t\t" <<
+		ORANGE <<
+		std::fixed << std::setprecision(1) <<
+		message
+		<< "\n" RESET;
+}
+
 void	ScalarConverter::makeChar(std::string &str)
 {
-	int	i = std::atoi(str.c_str());
-	if (i <= 32 || i >= 126)
-		std::cout << BLUE "char:\t\t" ORANGE << "Non displayable" << "\n" RESET;
-	else
-		std::cout << BLUE "char:\t\t" ORANGE << (char)i << "\n" RESET;
-	
 	if (str.size() == 1)
-		std::cout << BLUE "char:\t\t" ORANGE << str << "\n" RESET;
-	else
-		std::cout << BLUE "char:\t\t" ORANGE << "\'*\'" << "\n" RESET;
+	{
+		std::string	out;
+
+		out = (!std::isprint(str[0])) ? "Non displayable" : str;
+
+		printMessage("char", out);
+		return;
+	}
+	if (str == "nan" || str == "NAN")
+		return (printMessage("char", "impossible"));
+	
+	printMessage("char", "\'*\'");
 }
 void	ScalarConverter::makeInt(std::string &str)
 {
+	if (str == "nan" || str == "NAN")
+		return (printMessage("int",  "impossible"));
+
 	int	i = std::atoi(str.c_str());
 
-	std::cout << BLUE "int:\t\t"
-		ORANGE << i << "\n" RESET;
+	printMessage("int", i);
 }
 void	ScalarConverter::makeFloat(std::string &str)
 {
 	float	f = std::atof(str.c_str());
 
-	std::cout << BLUE "float:\t\t" <<
-		ORANGE <<
-		std::fixed << std::setprecision(1) <<
-		f << "f\n" RESET;
+	printMessage("float", f);
 	return;
 }
 void	ScalarConverter::makeDouble(std::string &str)
 {
 	double	d = std::atof(str.c_str());
 
-	std::cout << BLUE "double:\t\t" << 
-		ORANGE <<
-		std::fixed << std::setprecision(1) <<
-		d << "\n" RESET;
+	printMessage("double", d);
 	return;
+}
+
+static void	message(const std::string &message)
+{
+	std::cout << BRIGHT_RED << message << "\n" RESET;
 }
 
 void	ScalarConverter::convert(std::string &str)
 {
+	if (str[0] == '.')
+		return (message("Error: invalid input."));
+
 	makeChar(str);
 	makeInt(str);
 	makeFloat(str);

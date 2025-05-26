@@ -25,7 +25,16 @@ class ScalarConverter
 		static void	makeInt(std::string &str);
 		static void	makeFloat(std::string &str);
 		static void	makeDouble(std::string &str);
-
+		template<typename T>
+		static void	printMessage(const std::string &type, const T &message)
+		{
+			std::cout << BLUE <<
+					type <<
+					":\t\t" <<
+					ORANGE <<
+					message <<
+					"\n" << RESET;
+		}
 	public:
 		static void	convert(std::string &str);
 };

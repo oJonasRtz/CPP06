@@ -34,6 +34,7 @@ test: all
 	@valgrind ./$(NAME) hello
 	@valgrind ./$(NAME) 97.435435435535543
 	@valgrind ./$(NAME) nan
+	@valgrind ./$(NAME) .5f
 
 clean:
 	@echo "\033[1;32m===========================================\033[0m"
