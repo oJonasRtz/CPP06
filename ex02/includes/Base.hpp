@@ -11,15 +11,8 @@
 
 class Base
 {
-	private:
-		/* data */
 	public:
-		Base();
-		Base(const Base &other);
-		Base	&operator=(const Base &other);
-		~Base();
+		virtual ~Base(void);
 };
-
-std::ostream	&operator<<(std::ostream &out, const Base &other);
 
 #endif

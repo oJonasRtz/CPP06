@@ -8,18 +8,13 @@
 # define RESET "\033[0m"
 
 #include <iostream>
+#include "Base.hpp"
 
-class A
+class A: public Base
 {
-	private:
-		/* data */
 	public:
-		A();
-		A(const A &other);
-		A	&operator=(const A &other);
-		~A();
+		A(void);
+		~A(void);
 };
-
-std::ostream	&operator<<(std::ostream &out, const A &other);
 
 #endif

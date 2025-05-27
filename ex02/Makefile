@@ -1,11 +1,15 @@
-NAME=temp
-TESTS = 5
+NAME=identify
+TESTS = 3
 
 CC = c++
 FLAGS = -g3 -Wall -Werror -Wextra -std=c++98
 
 INCLUDE = includes
 SRC =	Base.cpp\
+		A.cpp\
+		B.cpp\
+		C.cpp\
+		identify.cpp\
 		main.cpp
 SRCS = $(addprefix src/, $(SRC))
 OBJS = $(SRCS:.cpp=.o)
@@ -24,7 +28,7 @@ src/%.o: src/%.cpp
 run: all
 	@valgrind ./$(NAME)
 
-test: all
+test: run
 	@for i in $(shell seq 1 $(TESTS)); do \
 		valgrind ./$(NAME) $$i; \
 	done
