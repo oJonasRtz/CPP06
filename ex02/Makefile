@@ -1,11 +1,11 @@
-NAME=convert
-TESTS = 1
+NAME=temp
+TESTS = 5
 
 CC = c++
 FLAGS = -g3 -Wall -Werror -Wextra -std=c++98
 
 INCLUDE = includes
-SRC =	ScalarConverter.cpp\
+SRC =	Base.cpp\
 		main.cpp
 SRCS = $(addprefix src/, $(SRC))
 OBJS = $(SRCS:.cpp=.o)
@@ -25,29 +25,9 @@ run: all
 	@valgrind ./$(NAME)
 
 test: all
-	@valgrind ./$(NAME)
-	@valgrind ./$(NAME) 0
-	@valgrind ./$(NAME) 1
-	@valgrind ./$(NAME) 42
-	@valgrind ./$(NAME) -42.0
-	@valgrind ./$(NAME) 42.0f
-	@valgrind ./$(NAME) 15.4007
-	@valgrind ./$(NAME) 15.4007f
-	@valgrind ./$(NAME) c
-	@valgrind ./$(NAME) hello
-	@valgrind ./$(NAME) 97.435435435535543
-	@valgrind ./$(NAME) nan
-	@valgrind ./$(NAME) -inf
-	@valgrind ./$(NAME) +inf
-	@valgrind ./$(NAME) .5f
-	@valgrind ./$(NAME) ""
-	@valgrind ./$(NAME) "`printf '\t'`"
-	@valgrind ./$(NAME) "`printf '\n'`"
-	@valgrind ./$(NAME) "`printf '\a'`"
-	@valgrind ./$(NAME) "`printf '\b'`"
-	@valgrind ./$(NAME) '.'
-	@valgrind ./$(NAME) -42
-	@valgrind ./$(NAME) -hello
+	@for i in $(shell seq 1 $(TESTS)); do \
+		valgrind ./$(NAME) $$i; \
+	done
 
 clean:
 	@echo "\033[1;32m===========================================\033[0m"

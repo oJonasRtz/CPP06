@@ -29,30 +29,6 @@ std::ostream	&operator<<(std::ostream &out, const ScalarConverter &other)
 	return (out);
 }
 
-template<>
-void	ScalarConverter::printMessage<float>(const std::string &type, const float &message)
-{
-	std::cout << BLUE << 
-		type <<
-		":\t\t" <<
-		ORANGE <<
-		std::fixed << std::setprecision(1) <<
-		message
-		<< "f\n" RESET;
-}
-
-template<>
-void	ScalarConverter::printMessage<double>(const std::string &type, const double &message)
-{
-	std::cout << BLUE << 
-		type <<
-		":\t\t" <<
-		ORANGE <<
-		std::fixed << std::setprecision(1) <<
-		message
-		<< "\n" RESET;
-}
-
 static bool	simpleCheck(std::string &str)
 {
 	return (str == "nan" || str == "nanf"
@@ -60,10 +36,25 @@ static bool	simpleCheck(std::string &str)
 		|| str == "-inf" || str == "-inff");
 }
 
+static bool isNum(const std::string &str)
+{
+	unsigned long int	start = str[0] == '-';
+
+	for (unsigned long int i = start; i < str.size() - 1; i++)
+		if (!std::isdigit(str[i]) && str[i] != '.')
+			return (false);
+	return (true);
+}
+
+static bool	stringCheck(const std::string &str)
+{
+	return (str.size() > 1 && !std::isdigit(str[0]) && !isNum(str));
+}
+
 std::string	ScalarConverter::makeChar(std::string &str)
 {
 	if (simpleCheck(str)
-		|| (str.size() > 1 && !std::isdigit(str[0]) && str[0] != '-'))
+		|| stringCheck(str))
 		return ("impossible");
 
 	if (std::isdigit(str[0]) || std::isdigit(str[1]))
@@ -79,21 +70,50 @@ std::string	ScalarConverter::makeChar(std::string &str)
 }
 std::string	ScalarConverter::makeInt(std::string &str)
 {
-	if (simpleCheck(str))
+	if (simpleCheck(str) || stringCheck(str))
 		return ("impossible");
 
 	std::ostringstream os;
-	os << std::atoi(str.c_str());
+	if (str.size() == 1 && !std::isdigit(str[0]))
+		os << static_cast<int>(str[0]);
+	else
+		os << std::atoi(str.c_str());
 
 	return (os.str());
 }
-float	ScalarConverter::makeFloat(std::string &str)
+std::string	ScalarConverter::makeFloat(std::string &str)
 {
-	return (std::atof(str.c_str()));
+	if (simpleCheck(str))
+		return (str + "f");
+	if (stringCheck(str))
+		return ("impossible");
+
+	std::ostringstream	os;
+	if (str.size() == 1 && !std::isdigit(str[0]))
+		os <<
+		std::fixed << std::setprecision(1) << static_cast<float>(str[0]);
+	else
+		os <<
+		std::fixed << std::setprecision(1) << std::atof(str.c_str());
+	
+	return (os.str() + "f");
 }
-double	ScalarConverter::makeDouble(std::string &str)
+std::string	ScalarConverter::makeDouble(std::string &str)
 {
-	return (std::atof(str.c_str()));
+	if (simpleCheck(str))
+		return (str);
+	if (stringCheck(str))
+		return ("impossible");
+
+	std::ostringstream	os;
+	if (str.size() == 1 && !std::isdigit(str[0]))
+		os <<
+		std::fixed << std::setprecision(1) << static_cast<double>(str[0]);
+	else
+		os <<
+		std::fixed << std::setprecision(1) << std::atof(str.c_str());
+	
+	return (os.str());
 }
 
 static void	message(const std::string &message)

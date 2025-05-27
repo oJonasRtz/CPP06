@@ -7,8 +7,13 @@ if [ $# -lt 2 ]; then
 	exit 1
 fi
 
+#Names
 FOLDERNAME=$1
 CLASSNAME=$2
+
+#Colours
+ORANGE='\033[38;5;208m'
+RESET='\033[0m'
 
 mkdir -p $FOLDERNAME
 mkdir -p $FOLDERNAME/src
@@ -73,6 +78,7 @@ re: fclean all
 .PHONY: all clean fclean re run test
 EOF
 
+echo -e "Folder: ${ORANGE}${FOLDERNAME}${RESET} successfuly created!"
 
 #Creates class
 ./createClass.sh $CLASSNAME $FOLDERNAME

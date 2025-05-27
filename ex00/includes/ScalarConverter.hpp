@@ -24,8 +24,8 @@ class ScalarConverter
 		
 		static std::string	makeChar(std::string &str);
 		static std::string	makeInt(std::string &str);
-		static float		makeFloat(std::string &str);
-		static double		makeDouble(std::string &str);
+		static std::string	makeFloat(std::string &str);
+		static std::string	makeDouble(std::string &str);
 		template<typename T>
 		static void	printMessage(const std::string &type, const T &message)
 		{
